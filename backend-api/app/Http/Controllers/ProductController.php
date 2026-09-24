@@ -2,55 +2,50 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\ProductService;
+use App\Models\Product;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class ProductController extends Controller
 {
-    private ProductService $productService;
-
-    public function __construct(
-        ProductService $productService
-    ) {
-        $this->productService = $productService;
-    }
-
     public function index()
     {
-        $products = $this->productService->getProducts();
-
         return response()->json([
-            'data' => $products
+            'data' => Product::all()
         ]);
     }
 
     public function store(Request $request)
     {
-        try {
-            $validated = $request->validate([
-                'name' => 'required|string|max:100',
-                'price' => 'required|numeric|min:0'
-            ]);
+        $product = Product::create($request->all());
 
-            return response()->json(
-                [
-                    'message' => 'Produk berhasil dibuat',
-                    'data' => $validated
-                ],
-                201
-            );
-        } catch (\Exception $e) {
-            Log::error(
-                $e->getMessage()
-            );
+        return response()->json([
+            'data' => $product
+        ], 201);
+    }
 
-            return response()->json(
-                [
-                    'message' => 'Terjadi kesalahan pada server'
-                ],
-                500
-            );
-        }
+    public function show(string $id)
+    {
+        return response()->json([
+            'data' => Product::findOrFail($id)
+        ]);
+    }
+
+    public function update(Request $request, string $id)
+    {
+        $product = Product::findOrFail($id);
+        $product->update($request->all());
+
+        return response()->json([
+            'data' => $product
+        ]);
+    }
+
+    public function destroy(string $id)
+    {
+        Product::findOrFail($id)->delete();
+
+        return response()->json([
+            'message' => 'Product deleted'
+        ]);
     }
 }
