@@ -48,7 +48,9 @@ class _ProductPageState extends State<ProductPage> {
 
               return ListTile(
                 title: Text(product.name),
-                subtitle: Text('Rp ${product.price}'),
+                subtitle: Text(
+                  'Rp ${product.price.toStringAsFixed(0)} | Stok: ${product.stock}',
+                ),
               );
             },
           );
