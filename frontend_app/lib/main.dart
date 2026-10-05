@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'screens/product_page.dart';
+import 'screens/login_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,8 +12,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Product App',
-      home: const ProductPage(),
+      title: 'Web Mobile Lanjut',
+      home: const LoginPage(),
     );
   }
 }
