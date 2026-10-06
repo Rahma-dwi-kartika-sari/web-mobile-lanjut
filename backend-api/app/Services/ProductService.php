@@ -2,21 +2,38 @@
 
 namespace App\Services;
 
+use App\Models\Product;
+
 class ProductService
 {
-    public function getProducts()
+    public function getAll()
     {
-        return [
-            [
-                'id' => 1,
-                'name' => 'Laptop',
-                'price' => 5000000
-            ],
-            [
-                'id' => 2,
-                'name' => 'Keyboard',
-                'price' => 300000
-            ]
-        ];
+        return Product::all();
+    }
+
+    public function getById(string $id)
+    {
+        return Product::findOrFail($id);
+    }
+
+    public function create(array $data)
+    {
+        return Product::create($data);
+    }
+
+    public function update(string $id, array $data)
+    {
+        $product = Product::findOrFail($id);
+        $product->update($data);
+
+        return $product->fresh();
+    }
+
+    public function delete(string $id)
+    {
+        $product = Product::findOrFail($id);
+        $product->delete();
+
+        return $product;
     }
 }

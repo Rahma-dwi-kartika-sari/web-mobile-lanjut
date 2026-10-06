@@ -6,7 +6,8 @@ import '../models/product.dart';
 class ApiService {
   static const storage = FlutterSecureStorage();
 
-  static const String baseUrl = 'http://10.0.2.2:8000/api';
+  static const String baseUrl =
+      'https://web-mobile-lanjut.vercel.app/api';
 
   // LOGIN
   static Future<bool> login(String email, String password) async {
@@ -79,5 +80,63 @@ class ApiService {
     } else {
       throw Exception('Gagal mengambil data produk');
     }
+  }
+
+  // MENAMBAH PRODUK
+  static Future<bool> addProduct(
+    String name,
+    double price,
+    int stock,
+  ) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/products'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: jsonEncode({
+        'name': name,
+        'price': price,
+        'stock': stock,
+      }),
+    );
+
+    return response.statusCode == 201;
+  }
+
+  // MENGUBAH PRODUK
+  static Future<bool> updateProduct(
+    int id,
+    String name,
+    double price,
+    int stock,
+  ) async {
+    final response = await http.put(
+      Uri.parse('$baseUrl/products/$id'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: jsonEncode({
+        'name': name,
+        'price': price,
+        'stock': stock,
+      }),
+    );
+
+    return response.statusCode == 200;
+  }
+
+  // MENGHAPUS PRODUK
+  static Future<bool> deleteProduct(int id) async {
+    final response = await http.delete(
+      Uri.parse('$baseUrl/products/$id'),
+      headers: {
+        'Accept': 'application/json',
+      },
+    );
+
+    return response.statusCode == 200 ||
+        response.statusCode == 204;
   }
 }
